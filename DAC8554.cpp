@@ -2,18 +2,18 @@
 //    FILE: DAC8554.cpp
 //  AUTHOR: Rob Tillaart
 // PURPOSE: Arduino library for DAC8554 SPI Digital Analog Convertor
-// VERSION: 0.1.4 experimental
+// VERSION: 0.2.0
 //     URL: https://github.com/RobTillaart/DAC8554
 //
 // HISTORY:
-//   0.1.0: 2017-12-19 initial version
-//   0.1.2  2020-04-06 minor refactor, readme.md
-//   0.1.3  2020-06-07 fix library.json
-//   0.1.4  2020-07-20 fix URL's in demo's; MIT license; minor edits
-//
+//   0.1.0: 2017-12-19  initial version
+//   0.1.2  2020-04-06  minor refactor, readme.md
+//   0.1.3  2020-06-07  fix library.json
+//   0.1.4  2020-07-20  fix URL's in demo's; MIT license; minor edits
+//   0.2.0  2020-12-18  add arduino-ci + unit test
 
-#include <SPI.h>
-#include <DAC8554.h>
+#include "SPI.h"
+#include "DAC8554.h"
 
 #define DAC8554_BUFFER_WRITE  0x00
 #define DAC8554_SINGLE_WRITE  0x10
@@ -60,29 +60,29 @@ void DAC8554::begin()
 //
 // SETVALUE
 //
-// DAC = 0,1,2,3
+// channel = 0,1,2,3
 // value = 0..65535
-void DAC8554::bufferValue(uint8_t DAC, uint16_t value)
+void DAC8554::bufferValue(uint8_t channel, uint16_t value)
 {
   uint8_t configRegister = _address;
   configRegister |= DAC8554_BUFFER_WRITE;
-  configRegister |= (DAC << 1);
+  configRegister |= (channel << 1);
   writeDevice(configRegister, value);
 }
 
-void DAC8554::setValue(uint8_t DAC, uint16_t value)
+void DAC8554::setValue(uint8_t channel, uint16_t value)
 {
   uint8_t configRegister = _address;
   configRegister |= DAC8554_ALL_WRITE;
-  configRegister |= (DAC << 1);
+  configRegister |= (channel << 1);
   writeDevice(configRegister, value);
 }
 
-void DAC8554::setSingleValue(uint8_t DAC, uint16_t value)
+void DAC8554::setSingleValue(uint8_t channel, uint16_t value)
 {
   uint8_t configRegister = _address;
   configRegister |= DAC8554_SINGLE_WRITE;
-  configRegister |= (DAC << 1);
+  configRegister |= (channel << 1);
   writeDevice(configRegister, value);
 }
 
@@ -90,35 +90,35 @@ void DAC8554::setSingleValue(uint8_t DAC, uint16_t value)
 //
 // POWERDOWN
 //
-// DAC = 0,1,2,3
+// channel = 0,1,2,3
 // powerDownMode =
 // DAC8554_POWERDOWN_NORMAL   0x00
 // DAC8554_POWERDOWN_1K       0x40
 // DAC8554_POWERDOWN_100K     0x80
 // DAC8554_POWERDOWN_HIGH_IMP 0xC0
-void DAC8554::bufferPowerDown(uint8_t DAC, uint8_t powerDownMode)
+void DAC8554::bufferPowerDown(uint8_t channel, uint8_t powerDownMode)
 {
   uint8_t configRegister = _address;
   configRegister |= DAC8554_BUFFER_WRITE;
-  configRegister |= (DAC << 1);
+  configRegister |= (channel << 1);
   uint16_t value = (powerDownMode & 0xC0) << 8;
   writeDevice(configRegister, value);
 }
 
-void DAC8554::setPowerDown(uint8_t DAC, uint8_t powerDownMode)
+void DAC8554::setPowerDown(uint8_t channel, uint8_t powerDownMode)
 {
   uint8_t configRegister = _address;
   configRegister |= DAC8554_ALL_WRITE;
-  configRegister |= (DAC << 1);
+  configRegister |= (channel << 1);
   uint16_t value = (powerDownMode & 0xC0) << 8;
   writeDevice(configRegister, value);
 }
 
-void DAC8554::setSinglePowerDown(uint8_t DAC, uint8_t powerDownMode)
+void DAC8554::setSinglePowerDown(uint8_t channel, uint8_t powerDownMode)
 {
   uint8_t configRegister = _address;
   configRegister |= DAC8554_SINGLE_WRITE;
-  configRegister |= (DAC << 1);
+  configRegister |= (channel << 1);
   uint16_t value = (powerDownMode & 0xC0) << 8;
   writeDevice(configRegister, value);
 }
