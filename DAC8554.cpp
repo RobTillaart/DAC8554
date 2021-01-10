@@ -25,7 +25,7 @@
 #define DAC8554_BROADCAST     0x30
 
 
-DAC8554::DAC8554(uint8_t address)
+DAC8554::DAC8554(uint8_t slaveSelect, uint8_t address)
 {
   _hwSPI = true;
   _slaveSelect = slaveSelect;
