@@ -11,7 +11,7 @@
 //  0.1.3  2020-06-07  fix library.json
 //  0.1.4  2020-07-20  fix URL's in demo's; MIT license; minor edits
 //  0.2.0  2020-12-18  add arduino-ci + unit test
-//  0.2.1  2021-01-10  fix slave select hardware SPI
+//  0.2.1  2021-01-10  fix slave select hardware SPI + getValue() + getPowerDownMode().
 //                     fix unit test.
 
 
@@ -126,6 +126,8 @@ void DAC8554::setSingleValue(uint8_t channel, uint16_t value)
 // DAC8554_POWERDOWN_HIGH_IMP 0xC0
 void DAC8554::bufferPowerDown(uint8_t channel, uint8_t powerDownMode)
 {
+  _register[channel] = powerDownMode;
+  
   uint8_t configRegister = _address;
   configRegister |= DAC8554_BUFFER_WRITE;
   configRegister |= (channel << 1);
@@ -136,6 +138,8 @@ void DAC8554::bufferPowerDown(uint8_t channel, uint8_t powerDownMode)
 
 void DAC8554::setPowerDown(uint8_t channel, uint8_t powerDownMode)
 {
+  _register[channel] = powerDownMode;
+
   uint8_t configRegister = _address;
   configRegister |= DAC8554_ALL_WRITE;
   configRegister |= (channel << 1);
@@ -146,6 +150,8 @@ void DAC8554::setPowerDown(uint8_t channel, uint8_t powerDownMode)
 
 void DAC8554::setSinglePowerDown(uint8_t channel, uint8_t powerDownMode)
 {
+  _register[channel] = powerDownMode;
+  
   uint8_t configRegister = _address;
   configRegister |= DAC8554_SINGLE_WRITE;
   configRegister |= (channel << 1);
@@ -156,13 +162,8 @@ void DAC8554::setSinglePowerDown(uint8_t channel, uint8_t powerDownMode)
 
 uint8_t DAC8554::getPowerDownMode(uint8_t channel)
 {
-  return _register[channel] & 0x03;
+  return _register[channel]; // slightly different than DAC8552 rrrrrr
 }
-
-
-
-
-
 
 
 //////////////////////////////////////////////////////////////////////

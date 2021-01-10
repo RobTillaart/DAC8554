@@ -54,8 +54,9 @@ private:
   uint8_t  _slaveSelect;
   bool     _hwSPI;
   uint8_t  _address;
-  uint16_t _value[4];
-  uint8_t  _register[4];
+
+  uint16_t _value[4];     // holdes last written / buffered value per channel
+  uint8_t  _register[4];  // holds powerDownMode per channel
 
   void     writeDevice(uint8_t configRegister, uint16_t value);
   void     swSPI_transfer(uint8_t value);

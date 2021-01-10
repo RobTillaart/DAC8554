@@ -45,7 +45,7 @@ unittest(test_HW_constructor)
 
   for (uint8_t channel = 0; channel < 4; channel++)
   {
-    fprintf(stderr, "CHANNEL %d\n", channel);
+    fprintf(stderr, "Channel %d\t", channel);
     for (uint16_t val = 0; val < 65500; val += 30)
     {
       mydac.setValue(channel, val);
@@ -67,7 +67,7 @@ unittest(test_SW_constructor)
   
   for (uint8_t channel = 0; channel < 4; channel++)
   {
-    fprintf(stderr, "CHANNEL %d\n", channel);
+    fprintf(stderr, "Channel %d\t", channel);
     for (uint16_t val = 0; val < 65500; val += 30)
     {
       mydac.setValue(channel, val);
@@ -89,7 +89,7 @@ unittest(test_powerDown)
 
   for (uint8_t channel = 0; channel < 4; channel++)
   {
-    fprintf(stderr, "CHANNEL %d\n", channel);
+    fprintf(stderr, "Channel %d\n", channel);
     mydac.setPowerDown(channel, DAC8554_POWERDOWN_NORMAL);
     assertEqual(DAC8554_POWERDOWN_NORMAL, mydac.getPowerDownMode(channel));
 
