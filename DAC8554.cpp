@@ -2,29 +2,36 @@
 //    FILE: DAC8554.cpp
 //  AUTHOR: Rob Tillaart
 // PURPOSE: Arduino library for DAC8554 SPI Digital Analog Convertor
-// VERSION: 0.2.0
+// VERSION: 0.2.1
 //     URL: https://github.com/RobTillaart/DAC8554
 //
-// HISTORY:
-//   0.1.0: 2017-12-19  initial version
-//   0.1.2  2020-04-06  minor refactor, readme.md
-//   0.1.3  2020-06-07  fix library.json
-//   0.1.4  2020-07-20  fix URL's in demo's; MIT license; minor edits
-//   0.2.0  2020-12-18  add arduino-ci + unit test
+//  HISTORY:
+//  0.1.0: 2017-12-19  initial version
+//  0.1.2  2020-04-06  minor refactor, readme.md
+//  0.1.3  2020-06-07  fix library.json
+//  0.1.4  2020-07-20  fix URL's in demo's; MIT license; minor edits
+//  0.2.0  2020-12-18  add arduino-ci + unit test
+//  0.2.1  2021-01-10  fix slave select hardware SPI
+//                     fix unit test.
+
 
 #include "SPI.h"
 #include "DAC8554.h"
+
 
 #define DAC8554_BUFFER_WRITE  0x00
 #define DAC8554_SINGLE_WRITE  0x10
 #define DAC8554_ALL_WRITE     0x20
 #define DAC8554_BROADCAST     0x30
 
+
 DAC8554::DAC8554(uint8_t address)
 {
   _hwSPI = true;
+  _slaveSelect = slaveSelect;
   _address = (address & 0x03) << 6;
 }
+
 
 // 0,1,2,4 resp 8550 8551 8552 8554
 DAC8554::DAC8554(uint8_t spiData, uint8_t spiClock, uint8_t slaveSelect, uint8_t address)
@@ -35,6 +42,7 @@ DAC8554::DAC8554(uint8_t spiData, uint8_t spiClock, uint8_t slaveSelect, uint8_t
   _slaveSelect = slaveSelect;
   _address = (address & 0x03) << 6;
 }
+
 
 // initializes the SPI
 // and sets internal state
@@ -56,6 +64,7 @@ void DAC8554::begin()
   }
 }
 
+
 //////////////////////////////////////////////////////////////////////
 //
 // SETVALUE
@@ -70,6 +79,7 @@ void DAC8554::bufferValue(uint8_t channel, uint16_t value)
   writeDevice(configRegister, value);
 }
 
+
 void DAC8554::setValue(uint8_t channel, uint16_t value)
 {
   uint8_t configRegister = _address;
@@ -78,6 +88,7 @@ void DAC8554::setValue(uint8_t channel, uint16_t value)
   writeDevice(configRegister, value);
 }
 
+
 void DAC8554::setSingleValue(uint8_t channel, uint16_t value)
 {
   uint8_t configRegister = _address;
@@ -85,6 +96,7 @@ void DAC8554::setSingleValue(uint8_t channel, uint16_t value)
   configRegister |= (channel << 1);
   writeDevice(configRegister, value);
 }
+
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -105,6 +117,7 @@ void DAC8554::bufferPowerDown(uint8_t channel, uint8_t powerDownMode)
   writeDevice(configRegister, value);
 }
 
+
 void DAC8554::setPowerDown(uint8_t channel, uint8_t powerDownMode)
 {
   uint8_t configRegister = _address;
@@ -114,6 +127,7 @@ void DAC8554::setPowerDown(uint8_t channel, uint8_t powerDownMode)
   writeDevice(configRegister, value);
 }
 
+
 void DAC8554::setSinglePowerDown(uint8_t channel, uint8_t powerDownMode)
 {
   uint8_t configRegister = _address;
@@ -122,6 +136,7 @@ void DAC8554::setSinglePowerDown(uint8_t channel, uint8_t powerDownMode)
   uint16_t value = (powerDownMode & 0xC0) << 8;
   writeDevice(configRegister, value);
 }
+
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -134,12 +149,14 @@ void DAC8554::broadcastBuffer()
   writeDevice(configRegister, value);
 }
 
+
 void DAC8554::broadcastValue(uint16_t value)
 {
   uint8_t configRegister = DAC8554_BROADCAST;
   configRegister |= 0x04;  // TODO magic number
   writeDevice(configRegister, value);
 }
+
 
 void DAC8554::broadcastPowerDown(uint8_t powerDownMode)
 {
@@ -171,6 +188,7 @@ void DAC8554::writeDevice(uint8_t configRegister, uint16_t value)
     digitalWrite(_slaveSelect, HIGH);
   }
 }
+
 
 // simple one mode version
 void DAC8554::swSPI_transfer(uint8_t value)

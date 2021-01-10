@@ -9,7 +9,7 @@
 
 #include "DAC8554.h"
 
-DAC8554 mydac;
+DAC8554 mydac(10);
 
 void setup()
 {
@@ -18,6 +18,7 @@ void setup()
   Serial.println(DAC8554_LIB_VERSION);
   mydac.begin();
 }
+
 
 void loop()
 {
@@ -50,4 +51,4 @@ void loop()
   if (channel >= 4) channel = 0;
 }
 
-// END OF FILE
+// -- END OF FILE --
