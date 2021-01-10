@@ -15,14 +15,13 @@
 //                     fix unit test.
 
 
-#include "SPI.h"
 #include "DAC8554.h"
 
 
-#define DAC8554_BUFFER_WRITE  0x00
-#define DAC8554_SINGLE_WRITE  0x10
-#define DAC8554_ALL_WRITE     0x20
-#define DAC8554_BROADCAST     0x30
+#define DAC8554_BUFFER_WRITE          0x00
+#define DAC8554_SINGLE_WRITE          0x10
+#define DAC8554_ALL_WRITE             0x20
+#define DAC8554_BROADCAST             0x30
 
 
 DAC8554::DAC8554(uint8_t slaveSelect, uint8_t address)
@@ -48,6 +47,9 @@ DAC8554::DAC8554(uint8_t spiData, uint8_t spiClock, uint8_t slaveSelect, uint8_t
 // and sets internal state
 void DAC8554::begin()
 {
+  pinMode(_slaveSelect, OUTPUT);
+  digitalWrite(_slaveSelect, HIGH);
+
   if(_hwSPI)
   {
     SPI.begin();
@@ -57,10 +59,14 @@ void DAC8554::begin()
   {
     pinMode(_spiData, OUTPUT);
     pinMode(_spiClock, OUTPUT);
-    pinMode(_slaveSelect, OUTPUT);
-    digitalWrite(_slaveSelect, HIGH);
     digitalWrite(_spiData, LOW);
     digitalWrite(_spiClock, LOW);
+  }
+
+  for (uint8_t i = 0; i < 4; i++)
+  {
+    _register[i] = 0;
+    _value[i] = 0;
   }
 }
 
@@ -82,6 +88,7 @@ void DAC8554::bufferValue(uint8_t channel, uint16_t value)
 
 void DAC8554::setValue(uint8_t channel, uint16_t value)
 {
+  _value[channel] = value;
   uint8_t configRegister = _address;
   configRegister |= DAC8554_ALL_WRITE;
   configRegister |= (channel << 1);
@@ -89,8 +96,17 @@ void DAC8554::setValue(uint8_t channel, uint16_t value)
 }
 
 
+// channel = 0, 1, 2, 3 depending on type
+// returns 0..65535
+uint16_t DAC8554::getValue(uint8_t channel)
+{
+  return _value[channel];
+}
+
+
 void DAC8554::setSingleValue(uint8_t channel, uint16_t value)
 {
+  _value[channel] = value;
   uint8_t configRegister = _address;
   configRegister |= DAC8554_SINGLE_WRITE;
   configRegister |= (channel << 1);
@@ -136,6 +152,17 @@ void DAC8554::setSinglePowerDown(uint8_t channel, uint8_t powerDownMode)
   uint16_t value = (powerDownMode & 0xC0) << 8;
   writeDevice(configRegister, value);
 }
+
+
+uint8_t DAC8554::getPowerDownMode(uint8_t channel)
+{
+  return _register[channel] & 0x03;
+}
+
+
+
+
+
 
 
 //////////////////////////////////////////////////////////////////////

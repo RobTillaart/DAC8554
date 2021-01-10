@@ -32,11 +32,13 @@ public:
 
   void     bufferValue(uint8_t channel, uint16_t value);
   void     setValue(uint8_t channel, uint16_t value);
+  uint16_t getValue(uint8_t channel);
   //writes the value to the channel but does not affect buffered ones
   void     setSingleValue(uint8_t channel, uint16_t value);
 
   void     bufferPowerDown(uint8_t channel, uint8_t powerDownMode);
   void     setPowerDown(uint8_t channel, uint8_t powerDownMode);
+  uint8_t  getPowerDownMode(uint8_t channel);
   void     setSinglePowerDown(uint8_t channel, uint8_t powerDownMode);
 
   // write all buffers to all(up to 4) 8554's channel's
@@ -50,8 +52,10 @@ private:
   uint8_t  _spiData;
   uint8_t  _spiClock;
   uint8_t  _slaveSelect;
-  uint8_t  _address;
   bool     _hwSPI;
+  uint8_t  _address;
+  uint16_t _value[4];
+  uint8_t  _register[4];
 
   void     writeDevice(uint8_t configRegister, uint16_t value);
   void     swSPI_transfer(uint8_t value);
