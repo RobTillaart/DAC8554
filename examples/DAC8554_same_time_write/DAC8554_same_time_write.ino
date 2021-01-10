@@ -10,7 +10,7 @@
 #include "DAC8554.h"
 
 // HW SPI
-DAC8554 mydac;
+DAC8554 mydac(10);
 
 uint32_t lastTime = 0;
 uint16_t state = 0;

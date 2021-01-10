@@ -9,8 +9,10 @@
 
 #include "DAC8554.h"
 
+
 // SW SPI pins 4,5,6
 DAC8554 mydac(4, 5, 6);
+
 
 void setup()
 {
@@ -19,6 +21,7 @@ void setup()
   Serial.println(DAC8554_LIB_VERSION);
   mydac.begin();
 }
+
 
 void loop()
 {

@@ -8,8 +8,10 @@
 
 #include "DAC8554.h"
 
+
 // HW SPI
-DAC8554 mydac;
+DAC8554 mydac(10);
+
 
 uint32_t lastTime = 0;
 uint16_t state = 0;
@@ -22,13 +24,13 @@ void setup()
   mydac.begin();
 }
 
+
 void loop()
 {
   uint8_t chanA = 0;
   uint8_t chanB = 1;
   uint8_t chanC = 2;
   uint8_t chanD = 3;
-
 
   // opposite square waves by setting A and B sequentially
   // first buffer one value and then set the other.

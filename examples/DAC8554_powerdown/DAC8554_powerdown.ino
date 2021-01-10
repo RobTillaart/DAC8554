@@ -9,8 +9,9 @@
 
 #include "DAC8554.h"
 
+
 //  HW SPI
-DAC8554 mydac;
+DAC8554 mydac(10);
 
 uint8_t chanA = 0;
 uint8_t chanB = 1;

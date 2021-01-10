@@ -8,9 +8,10 @@
 
 #include "DAC8554.h"
 
+
 // note address as param
-DAC8554 DAC_A(0);
-DAC8554 DAC_B(1);
+DAC8554 DAC_A(10, 0);
+DAC8554 DAC_B(11, 1);
 
 void setup()
 {
@@ -51,6 +52,9 @@ void setup()
   Serial.println("Done...");
 }
 
+
 void loop()
 {
 }
+
+// -- END OF FILE --
