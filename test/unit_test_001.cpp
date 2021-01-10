@@ -84,7 +84,7 @@ unittest(test_SW_constructor)
 
 unittest(test_powerDown)
 {
-  DAC8551 mydac(4, 5, 6);
+  DAC8554 mydac(4, 5, 6);
   mydac.begin();
 
   for (uint8_t channel = 0; channel < 4; channel++)
