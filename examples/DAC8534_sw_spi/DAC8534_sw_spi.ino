@@ -1,5 +1,5 @@
 //
-//    FILE: DAC8554_sw_spi.ino
+//    FILE: DAC8534_sw_spi.ino
 //  AUTHOR: Rob Tillaart
 // PURPOSE: demo DAC8554 library Arduino with software SPI
 //     URL: https://github.com/RobTillaart/Arduino/DAC8554
