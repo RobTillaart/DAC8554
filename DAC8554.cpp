@@ -245,12 +245,12 @@ void DAC8554::swSPI_transfer(uint8_t value)
 //
 //  DERIVED CLASSES  DAC8534
 //
-DAC8534::DAC8534(uint8_t select, __SPI_CLASS__ * spi) : DAC8554(select, spi)
+DAC8534::DAC8534(uint8_t select, __SPI_CLASS__ * spi, uint8_t address) : DAC8554(select, spi, address)
 {
 }
 
-DAC8534::DAC8534(uint8_t select, uint8_t spiData, uint8_t spiClock)
-                : DAC8554(select, spiData, spiClock)
+DAC8534::DAC8534(uint8_t select, uint8_t spiData, uint8_t spiClock, uint8_t address)
+                : DAC8554(select, spiData, spiClock, address)
 {
 }
 

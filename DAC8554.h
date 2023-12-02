@@ -102,8 +102,8 @@ protected:
 class DAC8534 : public DAC8554
 {
 public:
-  DAC8534(uint8_t select, __SPI_CLASS__ * spi = &SPI);
-  DAC8534(uint8_t select, uint8_t spiData, uint8_t spiClock);
+  DAC8534(uint8_t select, __SPI_CLASS__ * spi = &SPI, uint8_t address = 0);
+  DAC8534(uint8_t select, uint8_t spiData, uint8_t spiClock, uint8_t address = 0);
 };
 
 
