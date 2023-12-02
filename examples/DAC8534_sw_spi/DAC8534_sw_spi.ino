@@ -1,13 +1,14 @@
 //
-//    FILE: DAC8554_hw_spi.ino
+//    FILE: DAC8534_sw_spi.ino
 //  AUTHOR: Rob Tillaart
-// PURPOSE: demo DAC8554 library Arduino with hardware SPI
+// PURPOSE: demo DAC8554 library Arduino with software SPI
 //     URL: https://github.com/RobTillaart/Arduino/DAC8554
 
 
 #include "DAC8554.h"
 
-DAC8554 mydac(10);
+//  SW SPI pins select, data, clock
+DAC8534 mydac(4, 5, 6);
 
 
 void setup()
@@ -23,7 +24,7 @@ void setup()
 
 void loop()
 {
-  static uint8_t channel = 0;
+  uint8_t channel = 0;
 
   //  minimal sawtooth
   for (uint16_t val = 0; val < 65500; val+= 30)
@@ -39,7 +40,7 @@ void loop()
   //  minimal sinus
   for (long i = 0; i < 360; i++ )
   {
-    long s = 32767 + 32767 * sin( i * (PI / 180.0));
+    long s = 32768 + 32768 * sin( i * (PI / 180.0));
     mydac.setValue(channel, s);
     int av = analogRead(A0);
     Serial.print(i);
@@ -47,11 +48,7 @@ void loop()
     Serial.print(av);
     delay(100);
   }
-
-  channel++;
-  if (channel >= 4) channel = 0;
 }
 
 
 //  -- END OF FILE --
-
